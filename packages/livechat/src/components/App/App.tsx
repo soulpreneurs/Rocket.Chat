@@ -1,3 +1,4 @@
+import type { ILivechatTrigger } from '@rocket.chat/core-typings';
 import i18next from 'i18next';
 import { Component } from 'preact';
 import Router, { route } from 'preact-router';
@@ -38,6 +39,7 @@ type AppProps = {
 			showOnRegistration: boolean;
 		}[];
 		enabled?: boolean;
+		triggers: ILivechatTrigger[];
 	};
 	gdpr: {
 		accepted: boolean;
@@ -81,7 +83,8 @@ export class App extends Component<AppProps, AppState> {
 		poppedOut: false,
 	};
 
-	protected handleRoute = async () => {
+	protected handleRoute = async ({ url }: { url: string }) => {
+		const { ignoreTriggerMessages } = store.state as any; // TODO: properly type store
 		setTimeout(() => {
 			const {
 				config: {
@@ -91,14 +94,12 @@ export class App extends Component<AppProps, AppState> {
 						emailFieldRegistrationForm,
 						forceAcceptDataProcessingConsent: gdprRequired,
 					},
-					triggers,
 					online,
-					departments = [],
+					departments,
 				},
 				gdpr: { accepted: gdprAccepted },
 				user,
 			} = this.props;
-			const { firedTriggers = [] } = store.state;
 
 			setInitCookies();
 
@@ -112,18 +113,10 @@ export class App extends Component<AppProps, AppState> {
 			}
 
 			const showDepartment = departments.filter((dept) => dept.showOnRegistration).length > 0;
-			const hasPendingTriggers = triggers.some((trigger) =>
-				trigger.conditions.some((condition) => condition.name === 'chat-opened-by-visitor'),
-			);
-
-			const hasTriggeredMessages = firedTriggers.some((trigger) =>
-				trigger.conditions.some((condition) => condition.name !== 'after-guest-registration'),
-			);
-
 			const isAnyFieldVisible = nameFieldRegistrationForm || emailFieldRegistrationForm || showDepartment;
-			const showRegistrationForm = registrationForm && isAnyFieldVisible && !hasTriggeredMessages && !hasPendingTriggers && !user?.token;
+			const showRegistrationForm = !user?.token && registrationForm && isAnyFieldVisible && ignoreTriggerMessages;
 
-			if (showRegistrationForm) {
+			if (url === '/' && showRegistrationForm) {
 				return route('/register');
 			}
 		}, 100);
