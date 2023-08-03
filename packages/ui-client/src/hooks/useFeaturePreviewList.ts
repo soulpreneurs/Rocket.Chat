@@ -39,11 +39,11 @@ export const useFeaturePreviewList = () => {
 	}
 
 	const unseenFeatures = defaultFeaturesPreview.filter(
-		(feature) => !userFeaturesPreview?.find((userFeature) => userFeature.name === feature.name),
+		(feature) => !userFeaturesPreview?.find((userFeature: { name: string }) => userFeature.name === feature.name),
 	).length;
 
 	const mergedFeatures = defaultFeaturesPreview.map((feature) => {
-		const userFeature = userFeaturesPreview?.find((userFeature) => userFeature.name === feature.name);
+		const userFeature = userFeaturesPreview?.find((userFeature: { name: string }) => userFeature.name === feature.name);
 		return { ...feature, ...userFeature };
 	});
 
