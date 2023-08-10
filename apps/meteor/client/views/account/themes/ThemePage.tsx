@@ -1,4 +1,5 @@
 import { Accordion, Box, Button, ButtonGroup, Field, RadioButton, Tag } from '@rocket.chat/fuselage';
+import { useLocalStorage } from '@rocket.chat/fuselage-hooks';
 import { ExternalLink } from '@rocket.chat/ui-client';
 import { useEndpoint, useSetModal, useToastMessageDispatch, useTranslation, useUserPreference } from '@rocket.chat/ui-contexts';
 import type { ThemePreference } from '@rocket.chat/ui-theming/src/types/themes';
@@ -17,6 +18,7 @@ const ThemePage = () => {
 	const { data: license } = useIsEnterprise();
 
 	const themePreference = useUserPreference<ThemePreference>('themeAppearence') || 'auto';
+	const [, setPrevTheme] = useLocalStorage('prevTheme', themePreference);
 	const setUserPreferences = useEndpoint('POST', '/v1/users.setPreferences');
 
 	const {
@@ -35,6 +37,7 @@ const ThemePage = () => {
 		} catch (error) {
 			dispatchToastMessage({ type: 'error', message: error });
 		} finally {
+			setPrevTheme(themePreference);
 			reset({ themeAppearence });
 		}
 	};
@@ -43,9 +46,9 @@ const ThemePage = () => {
 		<Page>
 			<Page.Header title={t('Theme')} />
 			<Page.ScrollableContentWithShadow>
-				<Box maxWidth='x600' w='full' alignSelf='center' mb='x40' mi='x36'>
-					<Box fontScale='p1' mbe='x24'>
-						<Box pb='x16'>{t('Choose_theme_description')}</Box>
+				<Box maxWidth='x600' w='full' alignSelf='center' mb={40} mi={36}>
+					<Box fontScale='p1' mbe={24}>
+						<Box pb={16}>{t('Choose_theme_description')}</Box>
 					</Box>
 					<Accordion>
 						<Accordion.Item defaultExpanded={true} title={t('Theme')}>
@@ -56,10 +59,10 @@ const ThemePage = () => {
 								return (
 									<Field key={id} pbe={themes.length - 1 ? undefined : 'x28'} pbs={index === 0 ? undefined : 'x28'}>
 										<Box display='flex' flexDirection='row' justifyContent='spaceBetween' flexGrow={1}>
-											<Field.Label display='flex' alignItems='center' htmlFor={id}>
+											<Field.Label display='flex' alignItems='center' fontScale='p2b' htmlFor={id}>
 												{t.has(title) ? t(title) : title}
 												{communityDisabled && (
-													<Box is='span' mis='x8'>
+													<Box is='span' mis={8}>
 														<Tag variant='featured'>{t('Enterprise')}</Tag>
 													</Box>
 												)}
@@ -84,10 +87,10 @@ const ThemePage = () => {
 												/>
 											</Field.Row>
 										</Box>
-										<Field.Hint mbs='x12' style={{ whiteSpace: 'break-spaces' }}>
+										<Field.Hint mbs={12} style={{ whiteSpace: 'break-spaces' }}>
 											{t.has(description) ? t(description) : description}
 											{externalLink && communityDisabled && (
-												<Box mbs='x12'>
+												<Box mbs={12}>
 													<ExternalLink to={externalLink}>{t('Talk_to_an_expert')}</ExternalLink>
 												</Box>
 											)}
