@@ -501,22 +501,22 @@ export class LivechatRoomsRawEE extends LivechatRoomsRaw implements ILivechatRoo
 						_id: {
 							$arrayElemAt: ['$department.name', 0],
 						},
-						Chats: {
+						total: {
 							$sum: 1,
 						},
 					},
 				},
 				{
-					$sort: sort || { Chats: -1 },
+					$sort: sort || { total: -1 },
 				},
 				{
 					$group: {
 						_id: null,
-						total: { $sum: '$Chats' },
+						total: { $sum: '$total' },
 						data: {
 							$push: {
 								label: '$_id',
-								value: '$Chats',
+								value: '$total',
 							},
 						},
 					},
@@ -570,7 +570,7 @@ export class LivechatRoomsRawEE extends LivechatRoomsRaw implements ILivechatRoo
 				{
 					$group: {
 						_id: '$tags',
-						Chats: {
+						total: {
 							$sum: 1,
 						},
 					},
@@ -581,7 +581,7 @@ export class LivechatRoomsRawEE extends LivechatRoomsRaw implements ILivechatRoo
 				{
 					$group: {
 						_id: '$_id',
-						total: { $sum: '$Chats' },
+						total: { $sum: '$total' },
 					},
 				},
 				{
