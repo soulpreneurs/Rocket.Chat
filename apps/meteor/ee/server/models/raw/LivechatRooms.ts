@@ -521,7 +521,7 @@ export class LivechatRoomsRawEE extends LivechatRoomsRaw implements ILivechatRoo
 					},
 				},
 				{
-					$sort: sort || { total: -1 },
+					$sort: sort || { total: 1 },
 				},
 				{
 					$group: {
@@ -599,7 +599,7 @@ export class LivechatRoomsRawEE extends LivechatRoomsRaw implements ILivechatRoo
 					},
 				},
 				{
-					$sort: sort || { total: -1 },
+					$sort: sort || { total: 1 },
 				},
 				{
 					$group: {
