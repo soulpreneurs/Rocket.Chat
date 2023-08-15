@@ -688,13 +688,13 @@ export class LivechatRoomsRawEE extends LivechatRoomsRaw implements ILivechatRoo
 				},
 				{
 					$addFields: {
-						agentName: {
+						name: {
 							$ifNull: ['$agent.name', '$_id'],
 						},
 					},
 				},
 				{
-					$sort: sort || { agentName: 1 },
+					$sort: sort || { name: 1 },
 				},
 				{
 					$group: {
@@ -702,7 +702,7 @@ export class LivechatRoomsRawEE extends LivechatRoomsRaw implements ILivechatRoo
 						total: { $sum: '$total' },
 						data: {
 							$push: {
-								label: '$agentName',
+								label: '$name',
 								value: '$total',
 							},
 						},
