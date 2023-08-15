@@ -33,6 +33,8 @@ export const defaultFeaturesPreview: FeaturePreviewProps[] = [
 	},
 ];
 
+export const enabledDefaultFeatures = defaultFeaturesPreview.filter((feature) => feature.enabled);
+
 export const useFeaturePreviewList = () => {
 	const featurePreviewEnabled = useSetting<boolean>('Accounts_AllowFeaturePreview');
 	const userFeaturesPreview = useUserPreference<FeaturePreviewProps[]>('featuresPreview');
