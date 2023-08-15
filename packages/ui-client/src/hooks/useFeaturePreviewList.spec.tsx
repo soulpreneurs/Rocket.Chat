@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 
 import { MockedSettingsContext, MockedUserContext } from './useFeaturePreview.spec';
-import { useFeaturePreviewList, defaultFeaturesPreview } from './useFeaturePreviewList';
+import { useFeaturePreviewList, enabledDefaultFeatures } from './useFeaturePreviewList';
 
 it('should return the number of unseen features and Accounts_AllowFeaturePreview enabled ', () => {
 	const { result } = renderHook(() => useFeaturePreviewList(), {
@@ -19,7 +19,7 @@ it('should return the number of unseen features and Accounts_AllowFeaturePreview
 	expect(result.all[0]).toEqual(
 		expect.objectContaining({
 			featurePreviewEnabled: true,
-			unseenFeatures: defaultFeaturesPreview.length,
+			unseenFeatures: enabledDefaultFeatures.length,
 		}),
 	);
 });
@@ -55,7 +55,7 @@ it('should return 0 unseen features', () => {
 			>
 				<MockedUserContext
 					userPreferences={{
-						featuresPreview: defaultFeaturesPreview,
+						featuresPreview: enabledDefaultFeatures,
 					}}
 				>
 					{children}
@@ -99,8 +99,8 @@ it('should ignore removed feature previews', () => {
 	expect(result.current).toEqual(
 		expect.objectContaining({
 			featurePreviewEnabled: true,
-			unseenFeatures: defaultFeaturesPreview.length,
-			features: defaultFeaturesPreview,
+			unseenFeatures: enabledDefaultFeatures.length,
+			features: enabledDefaultFeatures,
 		}),
 	);
 });
