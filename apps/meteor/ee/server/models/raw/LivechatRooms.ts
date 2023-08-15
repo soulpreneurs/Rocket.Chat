@@ -431,7 +431,7 @@ export class LivechatRoomsRawEE extends LivechatRoomsRaw implements ILivechatRoo
 								],
 							},
 						},
-						On_Hold: {
+						onhold: {
 							$sum: {
 								$cond: [{ $eq: ['$onHold', true] }, 1, 0],
 							},
@@ -456,7 +456,7 @@ export class LivechatRoomsRawEE extends LivechatRoomsRaw implements ILivechatRoo
 								value: '$queued',
 							},
 							{
-								label: 'On_hold',
+								label: 'On_Hold',
 								value: '$onhold',
 							},
 						],
